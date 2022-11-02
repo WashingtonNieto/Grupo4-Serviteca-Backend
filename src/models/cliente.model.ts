@@ -1,4 +1,4 @@
-import {Entity, model, property, belongsTo, hasMany} from '@loopback/repository';
+import {Entity, model, property, belongsTo} from '@loopback/repository';
 import {Venta} from './venta.model';
 
 @model()
@@ -34,11 +34,6 @@ export class Cliente extends Entity {
   })
   correo: string;
 
-  //@belongsTo(() => Venta)
-  //ventaId: string;
-
-  @hasMany(() => Venta)
-  ventas: Venta[];
 
   constructor(data?: Partial<Cliente>) {
     super(data);

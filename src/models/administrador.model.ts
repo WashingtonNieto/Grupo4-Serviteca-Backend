@@ -1,8 +1,7 @@
-import {Entity, model, property, hasMany} from '@loopback/repository';
-import {Venta} from './venta.model';
+import {Entity, model, property} from '@loopback/repository';
 
 @model()
-export class Carro extends Entity {
+export class Administrador extends Entity {
   @property({
     type: 'string',
     id: true,
@@ -14,42 +13,46 @@ export class Carro extends Entity {
     type: 'string',
     required: true,
   })
-  placa: string;
+  documento: string;
 
   @property({
     type: 'string',
     required: true,
   })
-  color: string;
+  nombre: string;
 
   @property({
     type: 'string',
     required: true,
   })
-  marca: string;
+  apellido: string;
 
   @property({
     type: 'string',
     required: true,
   })
-  modelo: string;
+  correo: string;
 
   @property({
     type: 'string',
     required: true,
   })
-  anio: string;
+  celular: string;
 
-  @hasMany(() => Venta)
-  ventas: Venta[];
+  @property({
+    type: 'string',
+    required: true,
+  })
+  clave: string;
 
-  constructor(data?: Partial<Carro>) {
+
+  constructor(data?: Partial<Administrador>) {
     super(data);
   }
 }
 
-export interface CarroRelations {
+export interface AdministradorRelations {
   // describe navigational properties here
 }
 
-export type CarroWithRelations = Carro & CarroRelations;
+export type AdministradorWithRelations = Administrador & AdministradorRelations;

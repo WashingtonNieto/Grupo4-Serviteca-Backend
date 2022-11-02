@@ -1,5 +1,5 @@
 import {inject, Getter} from '@loopback/core';
-import {DefaultCrudRepository, repository, BelongsToAccessor, HasManyRepositoryFactory} from '@loopback/repository';
+import {DefaultCrudRepository, repository, HasManyRepositoryFactory} from '@loopback/repository';
 import {MongoDbDataSource} from '../datasources';
 import {Carro, CarroRelations, Venta} from '../models';
 import {VentaRepository} from './venta.repository';
@@ -10,8 +10,6 @@ export class CarroRepository extends DefaultCrudRepository<
   CarroRelations
 > {
 
-  public readonly venta: BelongsToAccessor<Venta, typeof Carro.prototype.id>;
-
   public readonly ventas: HasManyRepositoryFactory<Venta, typeof Carro.prototype.id>;
 
   constructor(
@@ -20,7 +18,5 @@ export class CarroRepository extends DefaultCrudRepository<
     super(Carro, dataSource);
     this.ventas = this.createHasManyRepositoryFactoryFor('ventas', ventaRepositoryGetter,);
     this.registerInclusionResolver('ventas', this.ventas.inclusionResolver);
-    this.venta = this.createBelongsToAccessorFor('venta', ventaRepositoryGetter,);
-    this.registerInclusionResolver('venta', this.venta.inclusionResolver);
   }
 }

@@ -1,19 +1,10 @@
 import {
-  Count,
-  CountSchema,
-  Filter,
   repository,
-  Where,
 } from '@loopback/repository';
 import {
-  del,
+  param,
   get,
   getModelSchemaRef,
-  getWhereSchemaFor,
-  param,
-  patch,
-  post,
-  requestBody,
 } from '@loopback/rest';
 import {
   Cliente,
@@ -23,13 +14,14 @@ import {ClienteRepository} from '../repositories';
 
 export class ClienteVentaController {
   constructor(
-    @repository(ClienteRepository) protected clienteRepository: ClienteRepository,
+    @repository(ClienteRepository)
+    public clienteRepository: ClienteRepository,
   ) { }
 
-  @get('/clientes/{id}/ventas', {
+  @get('/clientes/{id}/venta', {
     responses: {
       '200': {
-        description: 'Array of Cliente has many Venta',
+        description: 'Venta belonging to Cliente',
         content: {
           'application/json': {
             schema: {type: 'array', items: getModelSchemaRef(Venta)},
@@ -38,73 +30,9 @@ export class ClienteVentaController {
       },
     },
   })
-  async find(
-    @param.path.string('id') id: string,
-    @param.query.object('filter') filter?: Filter<Venta>,
-  ): Promise<Venta[]> {
-    return this.clienteRepository.ventas(id).find(filter);
-  }
-
-  @post('/clientes/{id}/ventas', {
-    responses: {
-      '200': {
-        description: 'Cliente model instance',
-        content: {'application/json': {schema: getModelSchemaRef(Venta)}},
-      },
-    },
-  })
-  async create(
+  async getVenta(
     @param.path.string('id') id: typeof Cliente.prototype.id,
-    @requestBody({
-      content: {
-        'application/json': {
-          schema: getModelSchemaRef(Venta, {
-            title: 'NewVentaInCliente',
-            exclude: ['id'],
-            optional: ['clienteId']
-          }),
-        },
-      },
-    }) venta: Omit<Venta, 'id'>,
   ): Promise<Venta> {
-    return this.clienteRepository.ventas(id).create(venta);
-  }
-
-  @patch('/clientes/{id}/ventas', {
-    responses: {
-      '200': {
-        description: 'Cliente.Venta PATCH success count',
-        content: {'application/json': {schema: CountSchema}},
-      },
-    },
-  })
-  async patch(
-    @param.path.string('id') id: string,
-    @requestBody({
-      content: {
-        'application/json': {
-          schema: getModelSchemaRef(Venta, {partial: true}),
-        },
-      },
-    })
-    venta: Partial<Venta>,
-    @param.query.object('where', getWhereSchemaFor(Venta)) where?: Where<Venta>,
-  ): Promise<Count> {
-    return this.clienteRepository.ventas(id).patch(venta, where);
-  }
-
-  @del('/clientes/{id}/ventas', {
-    responses: {
-      '200': {
-        description: 'Cliente.Venta DELETE success count',
-        content: {'application/json': {schema: CountSchema}},
-      },
-    },
-  })
-  async delete(
-    @param.path.string('id') id: string,
-    @param.query.object('where', getWhereSchemaFor(Venta)) where?: Where<Venta>,
-  ): Promise<Count> {
-    return this.clienteRepository.ventas(id).delete(where);
+    return this.clienteRepository.venta(id);
   }
 }
